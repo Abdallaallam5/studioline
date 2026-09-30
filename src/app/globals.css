@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans), var(--font-arabic), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SFMono-Regular", monospace;
+
+  /* Warm paper neutrals with a single deep-green accent. */
+  --color-paper: #f8f7f4;
+  --color-surface: #ffffff;
+  --color-line: #e9e7e1;
+  --color-line-strong: #d8d5cd;
+  --color-ink: #1b1b19;
+  --color-ink-soft: #45443f;
+  --color-muted: #7a7972;
+  --color-brand: #1f5f4f;
+  --color-brand-hover: #184b3f;
+  --color-brand-soft: #e8f1ed;
+  --color-danger: #b3261e;
+  --color-danger-soft: #fbeceb;
+
+  --shadow-card: 0 1px 2px rgb(27 27 25 / 0.04);
+  --shadow-pop: 0 12px 32px -8px rgb(27 27 25 / 0.18), 0 2px 6px rgb(27 27 25 / 0.06);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.02em;
+  }
+
+  /* The Arabic face must come first: otherwise the Latin font's system fallback claims Arabic glyphs. */
+  [dir="rtl"] body {
+    font-family: var(--font-arabic), var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* Arabic script is cursive: tightened tracking breaks the joins between letters. */
+  [dir="rtl"] * {
+    letter-spacing: 0 !important;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-brand) 22%, transparent);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
+  }
+
+  dialog {
+    margin: auto;
+  }
+
+  dialog::backdrop {
+    background: rgb(27 27 25 / 0.38);
+    backdrop-filter: blur(2px);
+  }
+
+  /* iOS zooms the page when focusing inputs smaller than 16px. */
+  @media (max-width: 640px) {
+    input,
+    select,
+    textarea {
+      font-size: 16px !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@utility select-chevron {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a7972' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  background-size: 16px;
+  padding-inline-end: 2.25rem;
+
+  &:where([dir="rtl"] *) {
+    background-position: left 0.6rem center;
+  }
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-strong) transparent;
+}

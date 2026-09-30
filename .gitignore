@@ -1,0 +1,20 @@
+node_modules
+.next
+out
+dist
+coverage
+
+# env
+.env
+.env.*
+!.env.example
+
+# local dev data
+.data
+.uploads
+
+next-env.d.ts
+*.tsbuildinfo
+.vercel
+.DS_Store
+npm-debug.log*
