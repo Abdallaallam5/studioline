@@ -2,13 +2,12 @@
 
 import { msg } from "@/lib/i18n/config";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { PROJECT_COLORS, PROJECT_STATUS_LABELS, PROJECT_STATUSES } from "@/lib/constants";
 import { parseLocalDate } from "@/lib/dates";
 import type { ActionState } from "@/lib/utils";
 import { Project, User } from "@/models";
-import { ActionError, parseForm, requireManagerWrite, run, zId, zIdList, zOptionalText } from "../action-utils";
+import { ActionError, go, parseForm, requireManagerWrite, run, zId, zIdList, zOptionalText } from "../action-utils";
 import { logWorkspace } from "../activity";
 import type { WorkspaceContext } from "../context";
 import { scope } from "../tenant";
@@ -55,7 +54,7 @@ export async function createProject(formData: FormData): Promise<ActionState> {
     const project = await Project.create({ ...fields, ...scope(ctx), createdBy: ctx.user.id });
     await logWorkspace(ctx.workspace.id, "PROJECT_CREATED", msg('Created project "{name}"', { name: project.name }), ctx.actor, { projectId: String(project._id) });
     revalidatePath("/workspace", "layout");
-    redirect(`/workspace/projects/${project._id}`);
+    go(`/workspace/projects/${project._id}`);
   });
 }
 

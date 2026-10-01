@@ -26,10 +26,12 @@ import { getT } from "@/lib/i18n/server";
 function Section({ id, eyebrow, title, lead, children }: { id?: string; eyebrow: string; title: string; lead?: string; children: ReactNode }) {
   return (
     <section id={id} className="mx-auto w-full max-w-6xl scroll-mt-20 px-5 py-16 sm:px-8 sm:py-20">
-      <p className="text-[13px] font-semibold text-brand">{eyebrow}</p>
-      <h2 className="mt-2 max-w-2xl text-2xl font-semibold leading-tight sm:text-[32px]">{title}</h2>
-      {lead && <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-soft">{lead}</p>}
-      <div className="mt-10">{children}</div>
+      <div className="reveal">
+        <p className="text-[13px] font-semibold text-brand">{eyebrow}</p>
+        <h2 className="mt-2 max-w-2xl text-2xl font-semibold leading-tight sm:text-[32px]">{title}</h2>
+        {lead && <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-ink-soft">{lead}</p>}
+      </div>
+      <div className="reveal mt-10">{children}</div>
     </section>
   );
 }
@@ -72,7 +74,7 @@ async function HeroPreview() {
           ))}
         </ul>
       </div>
-      <div className="absolute -bottom-6 -end-2 hidden w-64 rounded-xl border border-line bg-surface p-3.5 shadow-pop sm:block">
+      <div className="absolute -bottom-6 -end-2 hidden w-64 animate-float rounded-xl border border-line bg-surface p-3.5 shadow-pop sm:block">
         <p className="text-xs font-medium text-muted">{t("Submission v2")}</p>
         <p className="mt-1 text-[13px] leading-snug">{t("Updated the hero crop and swapped the CTA colour as requested.")}</p>
         <div className="mt-3 flex gap-2">
@@ -147,17 +149,17 @@ export default async function LandingPage() {
       <main>
         {/* Hero */}
         <section className="mx-auto w-full max-w-6xl px-5 pb-20 pt-14 text-center sm:px-8 sm:pt-20">
-          <p className="mx-auto inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-ink-soft">
+          <p className="mx-auto inline-flex animate-fade-up items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-xs font-medium text-ink-soft">
             <span className="size-1.5 rounded-full bg-brand" />
             {t("Built for marketing agencies and in-house teams")}
           </p>
-          <h1 className="mx-auto mt-5 max-w-3xl text-balance text-4xl font-semibold leading-[1.08] tracking-tight sm:text-[56px]">
+          <h1 className="anim-delay-1 mx-auto mt-5 max-w-3xl animate-fade-up text-balance text-4xl font-semibold leading-[1.08] tracking-tight sm:text-[56px]">
             {t("Every brief, deadline and review in one calm workspace.")}
           </h1>
-          <p className="mx-auto mt-5 max-w-xl text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
+          <p className="anim-delay-2 mx-auto mt-5 max-w-xl animate-fade-up text-pretty text-base leading-relaxed text-ink-soft sm:text-lg">
             {BRAND.name} {t("helps your team organise projects, assign tasks, track deadlines, review work and communicate — without chasing updates across chat threads.")}
           </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="anim-delay-3 mt-8 flex animate-fade-up flex-col items-center justify-center gap-3 sm:flex-row">
             <Link href="/request-access" className={buttonClass({ size: "lg" })}>
               {t("Request access")} <ArrowRight className="rtl:rotate-180" />
             </Link>
@@ -165,7 +167,7 @@ export default async function LandingPage() {
               {t("See how it works")}
             </a>
           </div>
-          <div className="mt-14 sm:mt-16">
+          <div className="anim-delay-4 mt-14 animate-fade-up sm:mt-16">
             <HeroPreview />
           </div>
         </section>
@@ -189,7 +191,7 @@ export default async function LandingPage() {
         <Section id="features" eyebrow={t("Features")} title={t("Everything a team needs to ship work. Nothing it doesn't.")} lead={t("No sprawling settings, no feature maze. A small set of tools that fit how marketing work actually moves.")}>
           <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
             {features.map((f) => (
-              <div key={f.title} className="bg-surface p-6">
+              <div key={f.title} className="bg-surface p-6 transition-colors duration-200 hover:bg-paper">
                 <div className="flex size-9 items-center justify-center rounded-lg bg-brand-soft text-brand [&_svg]:size-[18px]">{f.icon}</div>
                 <h3 className="mt-4 text-[15px] font-semibold">{t(f.title)}</h3>
                 <p className="mt-1.5 text-sm leading-relaxed text-ink-soft">{t(f.body)}</p>
@@ -218,7 +220,7 @@ export default async function LandingPage() {
         {/* Team management + review system */}
         <Section eyebrow={t("Team & review")} title={t("Two views. One for running the team, one for doing the work.")}>
           <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
+            <div className="rounded-2xl border border-line bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md sm:p-8">
               <Users className="size-5 text-brand" />
               <h3 className="mt-4 text-lg font-semibold">{t("Team management without surveillance")}</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink-soft">
@@ -233,7 +235,7 @@ export default async function LandingPage() {
                 ))}
               </ul>
             </div>
-            <div className="rounded-2xl border border-line bg-surface p-6 sm:p-8">
+            <div className="rounded-2xl border border-line bg-surface p-6 transition-all duration-200 hover:-translate-y-1 hover:shadow-md sm:p-8">
               <Upload className="size-5 text-brand" />
               <h3 className="mt-4 text-lg font-semibold">{t("A review inbox that keeps its history")}</h3>
               <p className="mt-2 text-sm leading-relaxed text-ink-soft">
@@ -307,7 +309,7 @@ export default async function LandingPage() {
 
         {/* CTA */}
         <section className="mx-auto w-full max-w-6xl px-5 pb-20 sm:px-8">
-          <div className="rounded-3xl bg-brand px-6 py-14 text-center text-white sm:px-12">
+          <div className="reveal rounded-3xl bg-brand px-6 py-14 text-center text-white sm:px-12">
             <h2 className="mx-auto max-w-xl text-balance text-2xl font-semibold leading-tight sm:text-[32px]">{t("Give your team one place to do its best work.")}</h2>
             <p className="mx-auto mt-3 max-w-md text-[15px] leading-relaxed text-white/80">{t("Tell us about your agency and we'll set up your workspace.")}</p>
             <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">

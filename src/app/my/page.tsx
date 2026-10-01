@@ -46,7 +46,7 @@ export default async function EmployeeHomePage() {
         }
       />
 
-      <div className="space-y-6">
+      <div className="stagger space-y-6">
         <Card>
           <CardHeader title={t("Today's tasks")} description={t("Due today or overdue")} />
           <TaskList items={todayTasks} hrefBase="/my/tasks" timezone={tz} showAssignee={false} empty={{ title: t("You're clear for today"), description: t("Check “Upcoming” to get ahead.") }} />

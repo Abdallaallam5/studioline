@@ -74,19 +74,19 @@ export default async function SubscriptionsPage({ searchParams }: { searchParams
                 const days = m.subscription ? daysUntil(m.subscription.renewalDate) : null;
                 return (
                   <tr key={m.workspaceId} className="hover:bg-paper/50">
-                    <Td>
+                    <Td label={t("Project Manager")}>
                       <Link href={`/owner/managers/${m.workspaceId}`} className="font-medium hover:text-brand">
                         {m.manager?.name ?? "—"}
                       </Link>
                     </Td>
-                    <Td>{m.workspaceName}</Td>
-                    <Td className="text-end tabular-nums">{m.subscription ? t.money(m.subscription.amountCents, settings.currency) : "—"}</Td>
-                    <Td>{m.subscription ? t.date(m.subscription.startDate) : "—"}</Td>
-                    <Td>
+                    <Td label={t("Workspace")}>{m.workspaceName}</Td>
+                    <Td label={t("Price")} className="text-end tabular-nums">{m.subscription ? t.money(m.subscription.amountCents, settings.currency) : "—"}</Td>
+                    <Td label={t("Start date")}>{m.subscription ? t.date(m.subscription.startDate) : "—"}</Td>
+                    <Td label={t("Status")}>
                       <AccountStatusBadge status={m.status} />
                     </Td>
-                    <Td>{m.lastPayment ? t.date(m.lastPayment.paidAt) : "—"}</Td>
-                    <Td>
+                    <Td label={t("Last payment")}>{m.lastPayment ? t.date(m.lastPayment.paidAt) : "—"}</Td>
+                    <Td label={t("Next renewal")}>
                       {m.subscription ? (
                         <>
                           {t.date(m.subscription.renewalDate)}

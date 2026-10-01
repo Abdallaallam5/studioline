@@ -38,7 +38,7 @@ export default async function PaymentsPage() {
         }
       />
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="stagger grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label={t("This month")} value={t.money(revenue.currentMonthCents, currency)} />
         <Stat label={t("Last month")} value={t.money(revenue.previousMonthCents, currency)} />
         <Stat label={t("Total collected")} value={t.money(revenue.totalCollectedCents, currency)} />

@@ -43,7 +43,7 @@ export default async function RequestsPage({ searchParams }: { searchParams: Pro
           <EmptyState icon={<Inbox />} title={t("No {status} requests", { status: t(TAB_LABELS[status]).toLowerCase() })} description={status === "PENDING_APPROVAL" ? t("When someone requests access from the website, it shows up here.") : undefined} />
         </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="stagger space-y-3">
           {requests.map((r) => {
             const id = String(r._id);
             return (
@@ -77,7 +77,7 @@ export default async function RequestsPage({ searchParams }: { searchParams: Pro
                         <dd>{t.date(r.createdAt)}</dd>
                       </div>
                     </dl>
-                    {r.description && <p className="mt-3 max-w-2xl whitespace-pre-wrap text-[13px] leading-relaxed text-ink-soft">{r.description}</p>}
+                    {r.description && <p dir="auto" className="mt-3 max-w-2xl whitespace-pre-wrap text-[13px] leading-relaxed text-ink-soft">{r.description}</p>}
                     {r.status === "REJECTED" && r.rejectionReason && <p className="mt-3 text-[13px] text-muted">{t("Reason:")} {r.rejectionReason}</p>}
                   </div>
 

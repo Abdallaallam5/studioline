@@ -48,6 +48,8 @@ export type ActionState = {
   fieldErrors?: Record<string, string[] | undefined>;
   /** A one-time link the user should pass on (setup or invitation link). */
   share?: ShareLink;
+  /** Where the client should navigate after a successful action (login, creation). */
+  redirectTo?: string;
 };
 
 export interface ShareLink {

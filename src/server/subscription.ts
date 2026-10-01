@@ -2,7 +2,7 @@ import "server-only";
 import { msg } from "@/lib/i18n/config";
 import { cache } from "react";
 import { ACCOUNT_STATUS_LABELS, type WorkspaceStatus } from "@/lib/constants";
-import { sendEmail } from "@/lib/email";
+import { queueEmail } from "@/lib/email";
 import { emailTemplates } from "@/lib/email/templates";
 import { appUrl } from "@/lib/env";
 import { computeWorkspaceStatus, suspensionDate } from "@/lib/subscription/status";
@@ -114,7 +114,7 @@ async function onStatusChanged(
       body: msg("The workspace will be suspended on {d_date} unless payment is received.", { d_date: suspensionDate(subscription.renewalDate, settings.gracePeriodDays).toISOString() }),
       href: "/workspace/account",
     });
-    await sendEmail({
+    await queueEmail({
       to: manager.email,
       ...emailTemplates.subscriptionPastDue(manager.locale, { name: manager.name, workspaceName: workspace.name, suspensionDate: suspensionDate(subscription.renewalDate, settings.gracePeriodDays), accountUrl }),
     });
@@ -127,7 +127,7 @@ async function onStatusChanged(
       body: msg("Your data is preserved. Access is restored when the subscription is renewed."),
       href: "/workspace/account",
     });
-    await sendEmail({ to: manager.email, ...emailTemplates.subscriptionSuspended(manager.locale, { name: manager.name, workspaceName: workspace.name, accountUrl }) });
+    await queueEmail({ to: manager.email, ...emailTemplates.subscriptionSuspended(manager.locale, { name: manager.name, workspaceName: workspace.name, accountUrl }) });
   } else if (next === "ACTIVE") {
     await notify({
       userId: String(manager._id),

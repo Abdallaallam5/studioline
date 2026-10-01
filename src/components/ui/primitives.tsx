@@ -108,7 +108,7 @@ export function Stat({ label, value, hint, href, tone }: { label: string; value:
   );
   const className = "block rounded-xl border border-line bg-surface px-4 py-3.5 shadow-card";
   return href ? (
-    <Link href={href} className={cn(className, "transition-colors hover:border-line-strong")}>
+    <Link href={href} className={cn(className, "transition-all duration-200 hover:-translate-y-0.5 hover:border-line-strong hover:shadow-md active:translate-y-0")}>
       {body}
     </Link>
   ) : (
@@ -120,8 +120,8 @@ export function Stat({ label, value, hint, href, tone }: { label: string; value:
 
 export function Table({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <div className="scrollbar-thin overflow-x-auto">
-      <table className={cn("w-full min-w-max border-collapse text-start text-sm", className)}>{children}</table>
+    <div className="responsive-table-wrap scrollbar-thin overflow-x-auto">
+      <table className={cn("responsive-table w-full min-w-max border-collapse text-start text-sm", className)}>{children}</table>
     </div>
   );
 }
@@ -130,8 +130,13 @@ export function Th({ className, children }: { className?: string; children?: Rea
   return <th className={cn("border-b border-line bg-paper/60 px-4 py-2.5 text-xs font-medium text-muted first:rounded-ss-xl last:rounded-se-xl", className)}>{children}</th>;
 }
 
-export function Td({ className, children }: { className?: string; children?: ReactNode }) {
-  return <td className={cn("border-b border-line px-4 py-3 align-middle [tr:last-child>&]:border-0", className)}>{children}</td>;
+/** `label` is the column name; phones show it beside the value when the table stacks into cards. */
+export function Td({ className, label, children }: { className?: string; label?: string; children?: ReactNode }) {
+  return (
+    <td data-label={label} className={cn("border-b border-line px-4 py-3 align-middle [tr:last-child>&]:border-0", className)}>
+      {children}
+    </td>
+  );
 }
 
 /* ─── Link tabs (state lives in the URL) ─────────────────────────────── */

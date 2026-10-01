@@ -135,6 +135,19 @@ All configuration is through environment variables — see [.env.example](.env.e
 
 **Email (optional).** `EMAIL_PROVIDER` selects `console`, `smtp`, or `resend`. With `console` no email leaves the server and the app still works: after approving a request or inviting an employee, the owner/manager is shown the one-time link with **Copy** and **Send on WhatsApp** buttons, and password resets are done by generating a reset link for the person (Team page for employees, the Project Manager page for managers). To add a provider, implement `EmailProvider` in `src/lib/email/index.ts`.
 
+*Free setup with Gmail:* turn on 2-Step Verification for the Google account, create an **App password** (Google Account → Security → App passwords), then set these environment variables on the host and redeploy:
+
+```
+EMAIL_PROVIDER=smtp
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=your.address@gmail.com
+SMTP_PASSWORD=<the 16-character app password>
+EMAIL_FROM="Studioline <your.address@gmail.com>"
+```
+
+Then open **Owner → Settings → Email** and press *Send a test email to me*; a failure shows the exact reason from the mail server. Gmail allows roughly 500 messages a day and sends only as the signed-in account. Notifications are sent after the page responds, so a slow mail server never slows the app.
+
 **File storage.** `STORAGE_PROVIDER` selects:
 
 - `mongodb` (default) — files are stored in a GridFS bucket in the same database. Nothing else to set up, and it works on serverless hosting. Best for small files; Atlas's free tier holds 512 MB in total.

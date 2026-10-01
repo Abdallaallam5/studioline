@@ -89,7 +89,7 @@ export default async function TeamPage() {
                 const chat = whatsappLink(e.phone, t("Hi {name}, ", { name: e.name.split(" ")[0] }));
                 return (
                   <tr key={id}>
-                    <Td>
+                    <Td label={t("Name")}>
                       <span className="flex items-center gap-2.5">
                         <Avatar name={e.name} />
                         <span>
@@ -101,14 +101,14 @@ export default async function TeamPage() {
                         </span>
                       </span>
                     </Td>
-                    <Td>
+                    <Td label={t("Contact")}>
                       <span className="block text-[13px]">{e.email}</span>
                       <span className="block text-xs text-muted">{e.phone ?? t("No phone")}</span>
                     </Td>
-                    <Td className="text-end tabular-nums">{stats?.active ?? "—"}</Td>
-                    <Td className="text-end tabular-nums">{stats?.inReview ?? "—"}</Td>
-                    <Td className="text-end tabular-nums">{stats?.completed ?? "—"}</Td>
-                    <Td className="text-muted">{t.date(e.createdAt, ctx.workspace.timezone)}</Td>
+                    <Td label={t("Active")} className="text-end tabular-nums">{stats?.active ?? "—"}</Td>
+                    <Td label={t("In review")} className="text-end tabular-nums">{stats?.inReview ?? "—"}</Td>
+                    <Td label={t("Completed")} className="text-end tabular-nums">{stats?.completed ?? "—"}</Td>
+                    <Td label={t("Joined")} className="text-muted">{t.date(e.createdAt, ctx.workspace.timezone)}</Td>
                     <Td>
                       <span className="flex items-center justify-end gap-1">
                         {chat && !e.disabledAt && (

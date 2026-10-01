@@ -37,7 +37,7 @@ export default async function ReviewInboxPage() {
           <EmptyState icon={<ClipboardCheck />} title={t("You're all caught up")} description={t("When someone submits a task for review, it lands here.")} />
         </Card>
       ) : (
-        <div className="space-y-3">
+        <div className="stagger space-y-3">
           {waiting.map(({ task, project, assignee }) => {
             const submission = submissionFor(task._id);
             return (
@@ -52,7 +52,7 @@ export default async function ReviewInboxPage() {
                         {project && <span>· {project.name}</span>}
                         {task.submittedAt && <span>{t("· submitted")} {t.ago(task.submittedAt)}</span>}
                       </p>
-                      {submission?.note && <p className="mt-2.5 line-clamp-2 max-w-2xl whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">{submission.note}</p>}
+                      {submission?.note && <p dir="auto" className="mt-2.5 line-clamp-2 max-w-2xl whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">{submission.note}</p>}
                       <div className="mt-2.5 flex flex-wrap items-center gap-3">
                         {submission && <Badge tone="violet">{t("Submission v")}{submission.version}</Badge>}
                         {submission && submission.fileIds.length > 0 && (

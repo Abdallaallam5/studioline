@@ -2,17 +2,16 @@
 
 import { msg } from "@/lib/i18n/config";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 import { HELP_REASON_LABELS, HELP_REASONS, REVIEW_DECISIONS, TASK_PRIORITIES, TASK_STATUS_LABELS, TASK_STATUSES } from "@/lib/constants";
 import { formatDeadline, parseLocalDateTime } from "@/lib/dates";
-import { sendEmail } from "@/lib/email";
+import { queueEmail } from "@/lib/email";
 import { emailTemplates } from "@/lib/email/templates";
 import { appUrl } from "@/lib/env";
 import { canEmployee, canManager, canManagerSetStatus, managerTarget } from "@/lib/tasks/workflow";
 import type { ActionState } from "@/lib/utils";
 import { Comment, FileAsset, HelpRequest, Project, Submission, Task, User, type ITask } from "@/models";
-import { ActionError, parseForm, requireEmployeeWrite, requireManagerWrite, run, zId, zIdList, zOptionalText } from "../action-utils";
+import { ActionError, go, parseForm, requireEmployeeWrite, requireManagerWrite, run, zId, zIdList, zOptionalText } from "../action-utils";
 import { logWorkspace } from "../activity";
 import { requireMember, type WorkspaceContext } from "../context";
 import { notify } from "../notifications";
@@ -81,7 +80,7 @@ async function notifyAssignment(ctx: WorkspaceContext, task: ITask, projectName:
     body: `${projectName} · ${deadline}`,
     href: employeeTaskUrl(task._id),
   });
-  await sendEmail({
+  await queueEmail({
     to: assignee.email,
     ...emailTemplates.taskAssigned(assignee.locale, { name: assignee.name, title: task.title, projectName, deadline: task.deadline, timezone: ctx.workspace.timezone, taskUrl: appUrl(employeeTaskUrl(task._id)) }),
   });
@@ -115,7 +114,7 @@ export async function createTask(formData: FormData): Promise<ActionState> {
     });
     await notifyAssignment(ctx, task.toObject(), project.name, assignee);
     refresh();
-    redirect(managerTaskUrl(task._id));
+    go(managerTaskUrl(task._id));
   });
 }
 

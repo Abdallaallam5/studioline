@@ -1,6 +1,7 @@
 "use client";
 
 import { CircleAlert, LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { createContext, useContext, useRef, useState, useTransition, type FormEvent, type ReactNode } from "react";
 import { cn, type ActionState } from "@/lib/utils";
 import { Button, type ButtonProps } from "./button";
@@ -42,7 +43,11 @@ export function ActionForm({ action, children, className, hidden, onSuccess, kee
   const t = useT();
   const [state, setState] = useState<ActionState>({});
   const [resetKey, setResetKey] = useState(0);
-  const [pending, startTransition] = useTransition();
+  const [submitting, startTransition] = useTransition();
+  // Stays true once the action asked us to navigate, so the form can't be submitted twice.
+  const [navigating, setNavigating] = useState(false);
+  const pending = submitting || navigating;
+  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const closeModal = useModalClose();
 
@@ -65,6 +70,11 @@ export function ActionForm({ action, children, className, hidden, onSuccess, kee
       }
       if (!result) return; // the action redirected
       setState(result);
+      if (result.ok && result.redirectTo) {
+        setNavigating(true);
+        router.push(result.redirectTo);
+        return;
+      }
       if (result.ok) {
         if (result.share) toast.share(result.message ?? "", result.share);
         else if (result.message && !inlineSuccess) toast.success(result.message);

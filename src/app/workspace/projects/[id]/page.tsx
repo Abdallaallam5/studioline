@@ -89,7 +89,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
 
       {/* Overview & progress */}
       <Card className="mb-6 p-4">
-        {project.description && <p className="mb-4 max-w-3xl whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">{project.description}</p>}
+        {project.description && <p dir="auto" className="mb-4 max-w-3xl whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">{project.description}</p>}
         <div className="mb-1.5 flex items-baseline justify-between text-[13px]">
           <span className="font-medium">{t("Progress")}</span>
           <span className="tabular-nums text-muted">
@@ -97,11 +97,11 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
           </span>
         </div>
         <div className="h-2 overflow-hidden rounded-full bg-ink/[0.07]" role="progressbar" aria-valuenow={percent} aria-valuemin={0} aria-valuemax={100}>
-          <div className="h-full rounded-full bg-brand transition-[width]" style={{ width: `${percent}%` }} />
+          <div className="h-full animate-grow rounded-full bg-brand" style={{ width: `${percent}%` }} />
         </div>
       </Card>
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="stagger grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label={t("Open tasks")} value={open.length} />
         <Stat label={t("Waiting for review")} value={inReview} tone={inReview ? "warn" : "default"} />
         <Stat label={t("Overdue")} value={overdue} tone={overdue ? "danger" : "default"} />

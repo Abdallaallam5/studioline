@@ -87,13 +87,13 @@ export function Toaster() {
   );
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[100] flex flex-col items-center gap-2 p-4 sm:items-end" aria-live="polite">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[100] flex flex-col items-center gap-2 p-4 pb-[max(1rem,env(safe-area-inset-bottom))] sm:items-end" aria-live="polite">
       {toasts.map((item) => (
         <div
           key={item.id}
           role={item.kind === "error" ? "alert" : "status"}
           className={cn(
-            "pointer-events-auto flex w-full max-w-sm items-start gap-2.5 rounded-xl border bg-surface px-3.5 py-3 text-sm shadow-pop",
+            "pointer-events-auto flex w-full max-w-sm animate-slide-up items-start gap-2.5 rounded-xl border bg-surface px-3.5 py-3 text-sm shadow-pop",
             item.kind === "error" ? "border-red-200" : "border-line",
           )}
         >

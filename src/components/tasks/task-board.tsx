@@ -52,7 +52,7 @@ export function TaskBoard({ tasks: initial, readOnly }: { tasks: BoardTask[]; re
   }
 
   return (
-    <div className="scrollbar-thin -mx-4 flex gap-3 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <div className="scrollbar-thin -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-4 px-4 pb-4 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:-mx-8 lg:px-8">
       {COLUMNS.map((status) => {
         const column = tasks.filter((t) => t.status === status);
         const droppable = canDrop(status);
@@ -73,7 +73,7 @@ export function TaskBoard({ tasks: initial, readOnly }: { tasks: BoardTask[]; re
               setOver(null);
             }}
             className={cn(
-              "flex w-[272px] shrink-0 flex-col rounded-xl border bg-ink/[0.025] transition-colors",
+              "flex w-[82vw] max-w-[300px] shrink-0 snap-start flex-col rounded-xl border bg-ink/[0.025] transition-colors sm:w-[272px]",
               over === status && droppable ? "border-brand bg-brand-soft/60" : "border-line",
               dragging && !droppable && dragging.status !== status && "opacity-50",
             )}

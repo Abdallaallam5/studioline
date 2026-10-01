@@ -22,7 +22,7 @@ export default async function OwnerDashboardPage() {
     <>
       <PageHeader title={t("{greeting}, {name}", { greeting: t.greeting("UTC"), name: user.name.split(" ")[0] })} description={t("How the platform is doing today.")} />
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="stagger grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label={t("Project Managers")} value={data.totalManagers} href="/owner/managers" />
         <Stat label={t("Active subscriptions")} value={data.activeSubscriptions} href="/owner/subscriptions" />
         <Stat label={t("Pending requests")} value={data.pendingRequests.length} href="/owner/requests" tone={data.pendingRequests.length ? "warn" : "default"} />
@@ -44,7 +44,7 @@ export default async function OwnerDashboardPage() {
         <Stat label={t("Total collected")} value={t.money(data.revenue.totalCollectedCents, currency)} hint={t("All recorded payments")} href="/owner/payments" />
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="stagger mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
         <Card>
           <CardHeader
             title={t("Registration requests")}

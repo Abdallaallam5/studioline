@@ -6,10 +6,10 @@ import { z } from "zod";
 import { generateToken } from "@/lib/auth/crypto";
 import { PAYMENT_METHODS } from "@/lib/constants";
 import { parseLocalDate } from "@/lib/dates";
-import { sendEmail } from "@/lib/email";
+import { emailStatus, queueEmail, sendEmail, sendEmailDetailed } from "@/lib/email";
 import { emailTemplates } from "@/lib/email/templates";
 import { appUrl } from "@/lib/env";
-import { translatorFor } from "@/lib/i18n/server";
+import { getLocale, translatorFor } from "@/lib/i18n/server";
 import { whatsappLink } from "@/lib/whatsapp";
 import { BRAND } from "@/lib/brand";
 import { formatMoney, parseMoneyToCents, type ActionState, type ShareLink } from "@/lib/utils";
@@ -126,7 +126,7 @@ export async function rejectRequest(formData: FormData): Promise<ActionState> {
     ).lean();
     if (!request) throw new ActionError("This request has already been reviewed.");
 
-    await sendEmail({ to: request.email, ...emailTemplates.requestRejected(request.locale, { name: request.fullName, reason: data.reason }) });
+    await queueEmail({ to: request.email, ...emailTemplates.requestRejected(request.locale, { name: request.fullName, reason: data.reason }) });
     await logPlatform("MANAGER_REJECTED", msg("{name} ({company}) was rejected", { name: request.fullName, company: request.company }), actor);
     refresh();
     return { ok: true, message: "Request rejected." };
@@ -196,7 +196,7 @@ export async function activateSubscription(formData: FormData): Promise<ActionSt
 
     const manager = await User.findById(workspace.managerId).lean();
     if (manager) {
-      await sendEmail({
+      await queueEmail({
         to: manager.email,
         ...emailTemplates.subscriptionActivated(manager.locale, { name: manager.name, workspaceName: workspace.name, renewalDate: data.renewalDate, appUrl: appUrl("/workspace") }),
       });
@@ -293,7 +293,7 @@ export async function recordPayment(formData: FormData): Promise<ActionState> {
 
     const manager = await User.findById(workspace.managerId).lean();
     if (manager) {
-      await sendEmail({
+      await queueEmail({
         to: manager.email,
         ...emailTemplates.paymentRecorded(manager.locale, { name: manager.name, amount, paidAt: data.paidAt, renewalDate }),
       });
@@ -386,6 +386,25 @@ export async function createManagerResetLink(formData: FormData): Promise<Action
     if (!manager) throw new ActionError("Workspace not found.");
     const share = await createResetLinkFor(manager);
     return { ok: true, share, message: msg("Password reset link for {name}. It works once and expires in 24 hours.", { name: manager.name }) };
+  });
+}
+
+/** Send a test message to the owner so a new email setup can be checked end to end. */
+export async function sendTestEmail(): Promise<ActionState> {
+  return run(async () => {
+    const { user } = await requireOwner();
+    if (!emailStatus().enabled) {
+      throw new ActionError("Email is not set up yet. Add the email settings to your hosting environment first.");
+    }
+    const t = translatorFor(await getLocale());
+    const result = await sendEmailDetailed({
+      to: user.email,
+      subject: t("{brand} test email", { brand: BRAND.name }),
+      text: t("It works! Emails from {brand} can reach you.", { brand: BRAND.name }),
+      html: `<p style="font-family:sans-serif;font-size:15px">${t("It works! Emails from {brand} can reach you.", { brand: BRAND.name })}</p>`,
+    });
+    if (!result.ok) return { ok: false, error: msg("The test email failed: {reason}", { reason: result.error ?? "unknown error" }) };
+    return { ok: true, message: msg("Test email sent to {email}. Check your inbox (and spam).", { email: user.email }) };
   });
 }
 

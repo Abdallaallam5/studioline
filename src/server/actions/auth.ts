@@ -10,14 +10,14 @@ import { clientIp, createSession, destroyAllSessions, destroyCurrentSession, get
 import { HOME_BY_ROLE, TEAM_SIZES } from "@/lib/constants";
 import { isValidTimezone } from "@/lib/dates";
 import { connectDb } from "@/lib/db";
-import { sendEmail } from "@/lib/email";
+import { queueEmail } from "@/lib/email";
 import { emailTemplates } from "@/lib/email/templates";
 import { appUrl } from "@/lib/env";
 import { getLocale } from "@/lib/i18n/server";
 import { rateLimit } from "@/lib/rate-limit";
 import type { ActionState } from "@/lib/utils";
 import { AuthToken, Invitation, RegistrationRequest, User, Workspace } from "@/models";
-import { ActionError, parseForm, run, zEmail, zName, zOptionalPhone, zOptionalText, zPassword, zPhone } from "../action-utils";
+import { ActionError, go, parseForm, run, zEmail, zName, zOptionalPhone, zOptionalText, zPassword, zPhone } from "../action-utils";
 import { logPlatform, logWorkspace } from "../activity";
 import { notify } from "../notifications";
 
@@ -53,9 +53,9 @@ export async function requestAccess(formData: FormData): Promise<ActionState> {
       const locale = await getLocale();
       await RegistrationRequest.create({ ...data, status: "PENDING_APPROVAL", locale });
       await logPlatform("MANAGER_REGISTERED", msg("{name} ({company}) requested access", { name: data.fullName, company: data.company }), { id: null, name: data.fullName });
-      await sendEmail({ to: data.email, ...emailTemplates.requestReceived(locale, { name: data.fullName }) });
+      await queueEmail({ to: data.email, ...emailTemplates.requestReceived(locale, { name: data.fullName }) });
     }
-    redirect("/request-access/submitted");
+    go("/request-access/submitted");
   });
 }
 
@@ -87,7 +87,7 @@ export async function login(formData: FormData): Promise<ActionState> {
 
     await createSession(String(user._id));
     await User.updateOne({ _id: user._id }, { $set: { lastLoginAt: new Date() } });
-    redirect(HOME_BY_ROLE[user.role]);
+    go(HOME_BY_ROLE[user.role]);
   });
 }
 
@@ -148,7 +148,7 @@ export async function completeSetup(formData: FormData): Promise<ActionState> {
 
     await logPlatform("WORKSPACE_CREATED", msg('Workspace "{workspace}" created for {name}', { workspace: data.workspaceName, name: request.fullName }), { id: String(userId), name: request.fullName }, String(workspaceId));
     await createSession(String(userId));
-    redirect("/workspace/account");
+    go("/workspace/account");
   });
 }
 
@@ -203,7 +203,7 @@ export async function acceptInvitation(formData: FormData): Promise<ActionState>
     });
 
     await createSession(String(user._id));
-    redirect("/my");
+    go("/my");
   });
 }
 
@@ -220,7 +220,7 @@ export async function requestPasswordReset(formData: FormData): Promise<ActionSt
       await AuthToken.deleteMany({ userId: user._id, type: "PASSWORD_RESET" });
       const { raw, hash } = generateToken();
       await AuthToken.create({ type: "PASSWORD_RESET", tokenHash: hash, userId: user._id, expiresAt: new Date(Date.now() + RESET_TTL_MINUTES * 60_000) });
-      await sendEmail({
+      await queueEmail({
         to: user.email,
         ...emailTemplates.passwordReset(user.locale, { name: user.name, resetUrl: appUrl(`/reset-password/${raw}`), expiresInMinutes: RESET_TTL_MINUTES }),
       });
@@ -244,7 +244,7 @@ export async function resetPassword(formData: FormData): Promise<ActionState> {
 
     await User.updateOne({ _id: token.userId }, { $set: { passwordHash: await hashPassword(data.password) } });
     await destroyAllSessions(String(token.userId));
-    redirect("/login?reset=1");
+    go("/login?reset=1");
   });
 }
 

@@ -37,14 +37,14 @@ export async function PaymentsTable({ payments, currency, workspaceNames, canVoi
       <tbody>
         {payments.map((p) => (
           <tr key={String(p._id)} className={cn(p.voidedAt && "text-muted")}>
-            <Td>{t.date(p.paidAt)}</Td>
-            {workspaceNames && <Td>{workspaceNames.get(String(p.workspaceId)) ?? "—"}</Td>}
-            <Td className={cn("text-end font-medium tabular-nums", p.voidedAt && "line-through")}>{t.money(p.amountCents, currency)}</Td>
-            <Td>{t(PAYMENT_METHOD_LABELS[p.method])}</Td>
-            <Td className="whitespace-nowrap">
+            <Td label={t("Paid on")}>{t.date(p.paidAt)}</Td>
+            {workspaceNames && <Td label={t("Workspace")}>{workspaceNames.get(String(p.workspaceId)) ?? "—"}</Td>}
+            <Td label={t("Amount")} className={cn("text-end font-medium tabular-nums", p.voidedAt && "line-through")}>{t.money(p.amountCents, currency)}</Td>
+            <Td label={t("Method")}>{t(PAYMENT_METHOD_LABELS[p.method])}</Td>
+            <Td label={t("Period")} className="whitespace-nowrap">
               {t.date(p.periodStart)} – {t.date(p.periodEnd)}
             </Td>
-            <Td className="max-w-56">
+            <Td label={t("Reference")} className="max-w-56">
               <span className="block truncate" title={[p.reference, p.note].filter(Boolean).join(" — ")}>
                 {p.reference || p.note || "—"}
               </span>

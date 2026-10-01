@@ -41,24 +41,24 @@ export default async function ManagersPage() {
             <tbody>
               {managers.map((m) => (
                 <tr key={m.workspaceId} className="hover:bg-paper/50">
-                  <Td>
+                  <Td label={t("Project Manager")}>
                     <Link href={`/owner/managers/${m.workspaceId}`} className="block">
                       <span className="block font-medium hover:text-brand">{m.manager?.name ?? "—"}</span>
                       <span className="block text-xs text-muted">{m.manager?.email}</span>
                     </Link>
                   </Td>
-                  <Td>{m.workspaceName}</Td>
-                  <Td>
+                  <Td label={t("Workspace")}>{m.workspaceName}</Td>
+                  <Td label={t("Status")}>
                     <span className="flex items-center gap-1.5">
                       <AccountStatusBadge status={m.status} />
                       {m.disabled && <Badge tone="red">{t("Disabled")}</Badge>}
                     </span>
                   </Td>
-                  <Td className="text-end tabular-nums">{m.subscription ? t.money(m.subscription.amountCents, settings.currency) : "—"}</Td>
-                  <Td>{m.subscription ? t.date(m.subscription.renewalDate) : "—"}</Td>
-                  <Td className="text-end tabular-nums">{m.employeeCount}</Td>
-                  <Td className="text-end tabular-nums">{m.projectCount}</Td>
-                  <Td className="text-muted">{t.date(m.createdAt)}</Td>
+                  <Td label={t("Amount")} className="text-end tabular-nums">{m.subscription ? t.money(m.subscription.amountCents, settings.currency) : "—"}</Td>
+                  <Td label={t("Renewal")}>{m.subscription ? t.date(m.subscription.renewalDate) : "—"}</Td>
+                  <Td label={t("Employees")} className="text-end tabular-nums">{m.employeeCount}</Td>
+                  <Td label={t("Projects")} className="text-end tabular-nums">{m.projectCount}</Td>
+                  <Td label={t("Created")} className="text-muted">{t.date(m.createdAt)}</Td>
                   <Td>
                     <span className="flex justify-end gap-2">
                       {m.status === "PENDING_PAYMENT" || m.status === "CANCELLED" ? (

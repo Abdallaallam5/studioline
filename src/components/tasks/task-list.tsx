@@ -44,7 +44,7 @@ export async function TaskList({ items, hrefBase, timezone, showAssignee = true,
           <Link href={`${hrefBase}/${task._id}`} className="flex items-center gap-3 px-4 py-3 transition-colors hover:bg-paper/70">
             {showAssignee && assignee && <Avatar name={assignee.name} size="sm" className="hidden sm:inline-flex" />}
             <div className="min-w-0 flex-1">
-              <p className={cn("truncate text-sm font-medium", task.status === "CANCELLED" && "text-muted line-through")}>{task.title}</p>
+              <p dir="auto" className={cn("truncate text-sm font-medium", task.status === "CANCELLED" && "text-muted line-through")}>{task.title}</p>
               <p className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted">
                 {project && (
                   <span className="inline-flex items-center gap-1.5">

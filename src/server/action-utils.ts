@@ -18,6 +18,22 @@ export interface ActionResult {
   error?: Text;
   fieldErrors?: Record<string, string[] | undefined>;
   share?: ShareLink;
+  redirectTo?: string;
+}
+
+/**
+ * Ask the client to navigate after a successful action. Unlike Next's redirect(),
+ * this returns normally, so the browser never sees a failed request while the
+ * redirect is in flight (which showed up as a brief "could not reach the server").
+ */
+class RedirectSignal extends Error {
+  constructor(public readonly path: string) {
+    super(`redirect:${path}`);
+  }
+}
+
+export function go(path: string): never {
+  throw new RedirectSignal(path);
 }
 
 /** An expected failure whose message is safe to show to the user. */
@@ -43,6 +59,8 @@ export async function run(fn: () => Promise<ActionResult | void>): Promise<Actio
     unstable_rethrow(err);
     if (err instanceof z.ZodError) {
       result = { ok: false, error: "Please check the highlighted fields.", fieldErrors: z.flattenError(err).fieldErrors };
+    } else if (err instanceof RedirectSignal) {
+      result = { ok: true, redirectTo: err.path };
     } else if (err instanceof ActionError) {
       result = { ok: false, error: err.text };
     } else {
@@ -58,6 +76,7 @@ export async function run(fn: () => Promise<ActionResult | void>): Promise<Actio
     message: localize(result.message),
     error: localize(result.error),
     share: result.share,
+    redirectTo: result.redirectTo,
     fieldErrors: result.fieldErrors && Object.fromEntries(Object.entries(result.fieldErrors).map(([field, errors]) => [field, errors?.map((e) => t(e))])),
   };
 }

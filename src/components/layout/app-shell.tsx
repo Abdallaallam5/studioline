@@ -125,7 +125,12 @@ export function AppShell({ homeHref, nav, secondaryNav, user, contextLabel, noti
         {notificationsHref && (
           <Link href={notificationsHref} className="relative rounded-lg p-2 text-ink-soft hover:bg-ink/5" aria-label={unreadCount ? t("Notifications ({count} unread)", { count: unreadCount }) : t("Notifications")}>
             <Bell className="size-5" />
-            {unreadCount > 0 && <span className="absolute end-1.5 top-1.5 size-2 rounded-full bg-brand ring-2 ring-surface" />}
+            {unreadCount > 0 && (
+              <span className="absolute end-1.5 top-1.5 flex size-2">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-brand opacity-60" />
+                <span className="relative size-2 rounded-full bg-brand ring-2 ring-surface" />
+              </span>
+            )}
           </Link>
         )}
       </header>
@@ -133,8 +138,8 @@ export function AppShell({ homeHref, nav, secondaryNav, user, contextLabel, noti
       {/* Mobile drawer */}
       {drawerOpen && (
         <div className="fixed inset-0 z-40 lg:hidden" role="dialog" aria-modal="true" aria-label={t("Menu")}>
-          <div className="absolute inset-0 bg-ink/40" onClick={() => setDrawerOpen(false)} />
-          <aside className="absolute inset-y-0 start-0 w-72 max-w-[85vw] bg-surface shadow-pop">
+          <div className="absolute inset-0 animate-fade-in bg-ink/40" onClick={() => setDrawerOpen(false)} />
+          <aside className="absolute inset-y-0 start-0 w-72 max-w-[85vw] animate-slide-in-start bg-surface shadow-pop">
             <button type="button" onClick={() => setDrawerOpen(false)} className="absolute end-2 top-3 rounded-lg p-2 text-muted hover:bg-ink/5" aria-label={t("Close menu")}>
               <X className="size-4" />
             </button>
@@ -143,7 +148,7 @@ export function AppShell({ homeHref, nav, secondaryNav, user, contextLabel, noti
         </div>
       )}
 
-      <main className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
+      <main className="mx-auto w-full max-w-6xl px-4 py-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] sm:px-6 lg:px-8 lg:py-8">
         {banner && <div className="mb-6">{banner}</div>}
         {children}
       </main>

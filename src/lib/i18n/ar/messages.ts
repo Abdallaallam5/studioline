@@ -341,6 +341,20 @@ export const messages: Record<string, string> = {
   "Please wait for your files to finish uploading.": "انتظر حتى ينتهي رفع ملفاتك.",
   "Could not reach the server. Check your connection and try again.": "تعذّر الاتصال بالخادم. راجع اتصالك وحاول مرة أخرى.",
 
+  /* ─── Email settings ─── */
+  Connected: "متصل",
+  "Not set up": "غير مُفعّل",
+  "Used for setup links, invitations, password resets and notifications.": "يُستخدم لروابط الإعداد والدعوات وإعادة تعيين كلمة المرور والإشعارات.",
+  "Sending through {detail}.": "الإرسال عبر {detail}.",
+  "No email is being sent. Setup and invitation links are shown on screen so you can copy them or send them on WhatsApp. To send real emails, add the email settings (EMAIL_PROVIDER, SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, EMAIL_FROM) to your hosting environment variables, redeploy, then send a test here.":
+    "لا يتم إرسال أي إيميل حالياً. تظهر روابط الإعداد والدعوات على الشاشة لتنسخها أو ترسلها على واتساب. لإرسال إيميلات حقيقية أضف إعدادات الإيميل (EMAIL_PROVIDER و SMTP_HOST و SMTP_PORT و SMTP_USER و SMTP_PASSWORD و EMAIL_FROM) في متغيرات البيئة على الاستضافة، وأعد النشر، ثم أرسل رسالة تجريبية من هنا.",
+  "Send a test email to me": "أرسل لي إيميل تجريبي",
+  "Email is not set up yet. Add the email settings to your hosting environment first.": "الإيميل غير مُفعّل بعد. أضف إعدادات الإيميل في بيئة الاستضافة أولاً.",
+  "{brand} test email": "رسالة تجريبية من {brand}",
+  "It works! Emails from {brand} can reach you.": "تعمل بنجاح! رسائل {brand} تصلك.",
+  "The test email failed: {reason}": "فشل إرسال الرسالة التجريبية: {reason}",
+  "Test email sent to {email}. Check your inbox (and spam).": "أُرسلت رسالة تجريبية إلى {email}. راجع صندوق الوارد (والرسائل غير المرغوبة).",
+
   /* ─── Emails ─── */
   "You are receiving this email because of your {brand} account.": "تصلك هذه الرسالة بسبب حسابك على {brand}.",
   "Or paste this link into your browser:": "أو الصق هذا الرابط في متصفحك:",

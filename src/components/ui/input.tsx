@@ -2,10 +2,10 @@ import type { InputHTMLAttributes, LabelHTMLAttributes, SelectHTMLAttributes, Te
 import { cn } from "@/lib/utils";
 
 const control =
-  "w-full rounded-lg border border-line-strong bg-surface px-3 text-sm text-ink shadow-card transition-colors placeholder:text-muted/70 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/15 disabled:cursor-not-allowed disabled:bg-paper disabled:text-muted group-data-[invalid=true]/field:border-danger";
+  "w-full rounded-lg border border-line-strong bg-surface px-3 text-sm text-ink shadow-card transition-[border-color,box-shadow] duration-150 placeholder:text-muted/70 focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/15 disabled:cursor-not-allowed disabled:bg-paper disabled:text-muted group-data-[invalid=true]/field:border-danger";
 
 export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
-  return <input className={cn(control, "h-9", className)} {...props} />;
+  return <input className={cn(control, "h-9 pointer-coarse:h-11", className)} {...props} />;
 }
 
 export function Textarea({ className, rows = 4, ...props }: TextareaHTMLAttributes<HTMLTextAreaElement>) {
@@ -14,7 +14,7 @@ export function Textarea({ className, rows = 4, ...props }: TextareaHTMLAttribut
 
 export function Select({ className, children, ...props }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select className={cn(control, "select-chevron h-9", className)} {...props}>
+    <select className={cn(control, "select-chevron h-9 pointer-coarse:h-11", className)} {...props}>
       {children}
     </select>
   );
@@ -25,5 +25,5 @@ export function Label({ className, ...props }: LabelHTMLAttributes<HTMLLabelElem
 }
 
 export function Checkbox({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
-  return <input type="checkbox" className={cn("size-4 shrink-0 rounded border-line-strong accent-brand", className)} {...props} />;
+  return <input type="checkbox" className={cn("size-4 shrink-0 rounded border-line-strong accent-brand pointer-coarse:size-5", className)} {...props} />;
 }

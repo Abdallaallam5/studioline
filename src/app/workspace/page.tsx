@@ -58,7 +58,7 @@ export default async function ManagerDashboardPage() {
         }
       />
 
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="stagger grid grid-cols-2 gap-3 lg:grid-cols-4">
         <Stat label={t("Tasks today")} value={counts.dueToday} hint={t("Due before midnight")} href="/workspace/tasks?view=today" />
         <Stat label={t("In progress")} value={counts.inProgress} href="/workspace/tasks?status=IN_PROGRESS" />
         <Stat label={t("Waiting for review")} value={counts.waitingReview} href="/workspace/review" tone={counts.waitingReview ? "warn" : "default"} />
@@ -66,7 +66,7 @@ export default async function ManagerDashboardPage() {
       </div>
 
       <h2 className="mb-3 mt-8 text-xs font-semibold uppercase tracking-wider text-muted">{t("Needs your attention")}</h2>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="stagger grid grid-cols-1 gap-6 lg:grid-cols-2">
         <AttentionCard title={t("Overdue tasks")} description={t("Past their deadline and not submitted")} items={dashboard.overdue} timezone={tz} emptyTitle={t("Nothing is overdue")} href="/workspace/tasks?view=overdue" />
         <AttentionCard title={t("Waiting for review")} description={t("Submitted work that needs your decision")} items={dashboard.review} timezone={tz} emptyTitle={t("No submissions to review")} href="/workspace/review" />
         <AttentionCard title={t("Employees requesting help")} description={t("Open help requests, newest first")} items={dashboard.help} timezone={tz} emptyTitle={t("Nobody is blocked")} href="/workspace/tasks?view=help" />
@@ -99,7 +99,7 @@ export default async function ManagerDashboardPage() {
             <tbody>
               {team.map((member) => (
                 <tr key={member.id}>
-                  <Td>
+                  <Td label={t("Team member")}>
                     <Link href={`/workspace/tasks?assignee=${member.id}`} className="flex items-center gap-2.5 hover:text-brand">
                       <Avatar name={member.name} size="sm" />
                       <span>
@@ -108,9 +108,9 @@ export default async function ManagerDashboardPage() {
                       </span>
                     </Link>
                   </Td>
-                  <Td className="text-end tabular-nums">{member.active}</Td>
-                  <Td className="text-end tabular-nums">{member.inReview}</Td>
-                  <Td className="text-end tabular-nums">{member.completed}</Td>
+                  <Td label={t("Active tasks")} className="text-end tabular-nums">{member.active}</Td>
+                  <Td label={t("Waiting for review")} className="text-end tabular-nums">{member.inReview}</Td>
+                  <Td label={t("Completed")} className="text-end tabular-nums">{member.completed}</Td>
                 </tr>
               ))}
             </tbody>

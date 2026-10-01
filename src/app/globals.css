@@ -19,7 +19,88 @@
   --color-danger-soft: #fbeceb;
 
   --shadow-card: 0 1px 2px rgb(27 27 25 / 0.04);
+  --ease-out-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --animate-fade-up: fade-up 0.5s var(--ease-out-soft) backwards;
+  --animate-fade-in: fade-in 0.3s ease-out backwards;
+  --animate-pop-in: pop-in 0.24s var(--ease-out-soft) backwards;
+  --animate-slide-in-start: slide-in-start 0.3s var(--ease-out-soft) backwards;
+  --animate-slide-up: slide-up 0.35s var(--ease-out-soft) backwards;
+  --animate-grow: grow-x 0.9s var(--ease-out-soft) 0.15s backwards;
+  --animate-float: float 7s ease-in-out infinite;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes slide-in-start {
+    from {
+      transform: translateX(calc(var(--dir, 1) * -100%));
+    }
+    to {
+      transform: none;
+    }
+  }
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes grow-x {
+    from {
+      transform: scaleX(0);
+    }
+    to {
+      transform: none;
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+
   --shadow-pop: 0 12px 32px -8px rgb(27 27 25 / 0.18), 0 2px 6px rgb(27 27 25 / 0.06);
+}
+
+:root {
+  --dir: 1;
+}
+:root[dir="rtl"] {
+  --dir: -1;
 }
 
 @layer base {
@@ -66,6 +147,14 @@
     margin: auto;
   }
 
+  dialog[open] {
+    animation: pop-in 0.24s var(--ease-out-soft);
+  }
+
+  dialog[open]::backdrop {
+    animation: fade-in 0.25s ease-out;
+  }
+
   dialog::backdrop {
     background: rgb(27 27 25 / 0.38);
     backdrop-filter: blur(2px);
@@ -85,8 +174,119 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      animation-delay: 0s !important;
       transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
+  }
+}
+
+/* Children of .stagger fade up one after another. */
+.stagger > * {
+  animation: fade-up 0.5s var(--ease-out-soft) backwards;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+.stagger > :nth-child(1) { --i: 0; }
+.stagger > :nth-child(2) { --i: 1; }
+.stagger > :nth-child(3) { --i: 2; }
+.stagger > :nth-child(4) { --i: 3; }
+.stagger > :nth-child(5) { --i: 4; }
+.stagger > :nth-child(6) { --i: 5; }
+.stagger > :nth-child(7) { --i: 6; }
+.stagger > :nth-child(8) { --i: 7; }
+.stagger > :nth-child(n + 9) { --i: 8; }
+
+/* Scroll-linked reveal for landing sections; browsers without support just show the content. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: reveal-in linear both;
+    animation-timeline: view();
+    animation-range: entry 5% entry 40%;
+  }
+  @keyframes reveal-in {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+}
+
+[dir="rtl"] .animate-grow {
+  transform-origin: right;
+}
+.animate-grow {
+  transform-origin: left;
+}
+
+@utility anim-delay-1 { animation-delay: 80ms; }
+@utility anim-delay-2 { animation-delay: 160ms; }
+@utility anim-delay-3 { animation-delay: 240ms; }
+@utility anim-delay-4 { animation-delay: 320ms; }
+@utility anim-delay-5 { animation-delay: 400ms; }
+
+/*
+ * Tables become stacked cards on phones: each row is a card and each cell shows
+ * its column name (from data-label) next to the value. Cells without a label
+ * (action buttons) span the full width.
+ */
+@media (max-width: 767px) {
+  .responsive-table-wrap {
+    overflow-x: visible !important;
+  }
+  .responsive-table {
+    min-width: 0 !important;
+    width: 100%;
+  }
+  .responsive-table thead {
+    display: none;
+  }
+  .responsive-table,
+  .responsive-table tbody,
+  .responsive-table tr,
+  .responsive-table td {
+    display: block;
+  }
+  .responsive-table tr {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid var(--color-line);
+  }
+  .responsive-table tr:last-child {
+    border-bottom: 0;
+  }
+  .responsive-table td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.4rem 0 !important;
+    border: 0 !important;
+    text-align: end;
+  }
+  .responsive-table td[data-label]::before {
+    content: attr(data-label);
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    text-align: start;
+  }
+  .responsive-table td:not([data-label]) {
+    justify-content: flex-end;
+    padding-top: 0.6rem !important;
+  }
+  .responsive-table td > span.flex,
+  .responsive-table td > .flex {
+    flex-wrap: wrap;
   }
 }
 

@@ -115,7 +115,7 @@ export async function TaskDetail({ ctx, taskId, backHref }: { ctx: WorkspaceCont
             {task.helpRequested && <HelpBadge />}
             {overdue && <Badge tone="red">{t("Overdue")}</Badge>}
           </div>
-          <h1 className="text-xl font-semibold leading-snug sm:text-2xl">{task.title}</h1>
+          <h1 dir="auto" className="text-xl font-semibold leading-snug sm:text-2xl">{task.title}</h1>
           {project && (
             <p className="mt-1.5 inline-flex items-center gap-1.5 text-sm text-muted">
               <span className="size-2 rounded-sm" style={{ backgroundColor: project.color }} aria-hidden />
@@ -223,7 +223,7 @@ export async function TaskDetail({ ctx, taskId, backHref }: { ctx: WorkspaceCont
       <div className="mb-6 space-y-3 empty:hidden">
         {!isManager && task.status === "CHANGES_REQUESTED" && latestReview && (
           <Callout tone="warn" icon={<Undo2 />} title={t("{name} requested changes", { name: nameOf(latestReview.reviewerId) })}>
-            <p className="whitespace-pre-wrap">{latestReview.feedback}</p>
+            <p dir="auto" className="whitespace-pre-wrap">{latestReview.feedback}</p>
           </Callout>
         )}
         {!isManager && task.status === "SUBMITTED_FOR_REVIEW" && <Callout icon={<Send />} title={t("Waiting for review")}>{t("You'll be notified as soon as your manager approves it or requests changes.")}</Callout>}
@@ -237,7 +237,7 @@ export async function TaskDetail({ ctx, taskId, backHref }: { ctx: WorkspaceCont
             <Card className="border-violet-200 ring-1 ring-violet-100">
               <CardHeader title={t("Review submission v{version}", { version: pendingSubmission.version })} description={t("Submitted by {name} · {when}", { name: nameOf(pendingSubmission.submittedBy), when: t.ago(pendingSubmission.createdAt) })} />
               <div className="space-y-4 p-4">
-                {pendingSubmission.note && <p className="whitespace-pre-wrap text-sm leading-relaxed">{pendingSubmission.note}</p>}
+                {pendingSubmission.note && <p dir="auto" className="whitespace-pre-wrap text-sm leading-relaxed">{pendingSubmission.note}</p>}
                 <AttachmentList files={pick(pendingSubmission.fileIds)} />
                 {canWrite && (
                   <ActionForm action={reviewSubmission} hidden={{ taskId: id }} className="space-y-3 border-t border-line pt-4">
@@ -273,7 +273,7 @@ export async function TaskDetail({ ctx, taskId, backHref }: { ctx: WorkspaceCont
           <Card>
             <CardHeader title={t("Description")} />
             <div className="p-4">
-              {task.description ? <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">{task.description}</p> : <p className="text-sm text-muted">{t("No description provided.")}</p>}
+              {task.description ? <p dir="auto" className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">{task.description}</p> : <p className="text-sm text-muted">{t("No description provided.")}</p>}
             </div>
           </Card>
 
@@ -334,14 +334,14 @@ export async function TaskDetail({ ctx, taskId, backHref }: { ctx: WorkspaceCont
                         {s.review ? <Badge tone={s.review.decision === "APPROVED" ? "green" : "amber"}>{s.review.decision === "APPROVED" ? t("Approved") : t("Changes requested")}</Badge> : <Badge tone="violet">{t("Awaiting review")}</Badge>}
                       </span>
                     </div>
-                    {s.note && <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">{s.note}</p>}
+                    {s.note && <p dir="auto" className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">{s.note}</p>}
                     <AttachmentList files={pick(s.fileIds)} />
                     {s.review?.feedback && (
                       <div className="rounded-lg bg-paper px-3 py-2.5 text-sm">
                         <p className="text-xs font-medium text-muted">
                           {t("Feedback from")} {nameOf(s.review.reviewerId)} · {t.ago(s.review.reviewedAt)}
                         </p>
-                        <p className="mt-1 whitespace-pre-wrap leading-relaxed">{s.review.feedback}</p>
+                        <p dir="auto" className="mt-1 whitespace-pre-wrap leading-relaxed">{s.review.feedback}</p>
                       </div>
                     )}
                   </li>
@@ -364,7 +364,7 @@ export async function TaskDetail({ ctx, taskId, backHref }: { ctx: WorkspaceCont
                           {t.ago(c.createdAt)}
                         </span>
                       </p>
-                      <p className="mt-0.5 whitespace-pre-wrap break-words text-sm leading-relaxed text-ink-soft">{c.body}</p>
+                      <p dir="auto" className="mt-0.5 whitespace-pre-wrap break-words text-sm leading-relaxed text-ink-soft">{c.body}</p>
                     </div>
                   </li>
                 ))}
@@ -470,7 +470,7 @@ async function HelpThread({
           <Badge tone="red">{t(HELP_REASON_LABELS[help.reason])}</Badge>
           <span className="text-xs text-muted">{t.ago(help.createdAt)}</span>
         </p>
-        <p className="mt-1.5 whitespace-pre-wrap text-sm leading-relaxed">{help.message}</p>
+        <p dir="auto" className="mt-1.5 whitespace-pre-wrap text-sm leading-relaxed">{help.message}</p>
       </div>
       {help.replies.length > 0 && (
         <ul className="space-y-2 border-s-2 border-line ps-3">
@@ -480,7 +480,7 @@ async function HelpThread({
                 <span className="font-medium">{nameOf(reply.authorId)}</span>
                 <span className="ms-2 text-xs text-muted">{t.ago(reply.createdAt)}</span>
               </p>
-              <p className="mt-0.5 whitespace-pre-wrap leading-relaxed text-ink-soft">{reply.body}</p>
+              <p dir="auto" className="mt-0.5 whitespace-pre-wrap leading-relaxed text-ink-soft">{reply.body}</p>
             </li>
           ))}
         </ul>

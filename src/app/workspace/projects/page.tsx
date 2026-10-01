@@ -68,12 +68,12 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
           />
         </Card>
       ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <div className="stagger grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {projects.map((project) => {
             const s = stats(String(project._id));
             return (
               <Link key={String(project._id)} href={`/workspace/projects/${project._id}`} className="group block">
-                <Card className="flex h-full flex-col p-4 transition-colors group-hover:border-line-strong">
+                <Card className="flex h-full flex-col p-4 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-line-strong group-hover:shadow-md">
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex min-w-0 items-center gap-2.5">
                       <span className="size-2.5 shrink-0 rounded-sm" style={{ backgroundColor: project.color }} aria-hidden />
@@ -91,7 +91,7 @@ export default async function ProjectsPage({ searchParams }: { searchParams: Pro
                       <span className="tabular-nums">{s.percent}%</span>
                     </div>
                     <div className="h-1.5 overflow-hidden rounded-full bg-ink/[0.07]" role="progressbar" aria-valuenow={s.percent} aria-valuemin={0} aria-valuemax={100}>
-                      <div className="h-full rounded-full bg-brand" style={{ width: `${s.percent}%` }} />
+                      <div className="h-full animate-grow rounded-full bg-brand" style={{ width: `${s.percent}%` }} />
                     </div>
                     <p className="mt-3 text-xs text-muted">
                       {t.n(project.memberIds.length, "member")}

@@ -23,7 +23,7 @@ export async function EmployeeTaskPage({ title, description, sections }: { title
   return (
     <>
       <PageHeader title={title} description={description} />
-      <div className="space-y-6">
+      <div className="stagger space-y-6">
         {resolved.map((section, i) =>
           section.hideWhenEmpty && lists[i].length === 0 ? null : (
             <Card key={section.title}>
